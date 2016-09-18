@@ -1,10 +1,10 @@
 package code;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 
+import com.ictclas.analysis.analyzer.Word;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 
@@ -30,16 +30,6 @@ public class NlpirTest {
 		public void NLPIR_Exit();
 	}
 
-	public static String transString(String aidString, String ori_encoding,
-			String new_encoding) {
-		try {
-			return new String(aidString.getBytes(ori_encoding), new_encoding);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	public static void main(String[] args) throws Exception {
 		String argu = "";
 		//UTF-8:1 GBK:0，BIG5:2 含繁体字的GBK:3
@@ -54,20 +44,20 @@ public class NlpirTest {
 			return;
 		}
 
-		String sInput = "据悉，质检总局已将最新有关情况再次通报美方，要求美方加强对输华玉米的产地来源、运输及仓储等环节的管控措施，有效避免输华玉米被未经我国农业部安全评估并批准的转基因品系污染。";
+		String sInput = "//据悉，质检总局已将最新有关情况再次通报美方，要求美方加强对输华玉米的产地来源、运输及仓储等环节的管控措施，有效避免输华玉米被未经我国农业部安全评估并批准的转基因品系污染。";
 
 		String returnText = null;
 		try {
 			returnText = CLibrary.Instance.NLPIR_ParagraphProcess(sInput, 1);
 			System.out.println("分词结果为： " + returnText);
 
-			String keyWords = CLibrary.Instance.NLPIR_GetKeyWords(sInput, Integer.MAX_VALUE,true);
-			System.out.println("关键词提取结果是：" + keyWords);
+			/*String keyWords = CLibrary.Instance.NLPIR_GetKeyWords(sInput, Integer.MAX_VALUE,true);
+			System.out.println("关键词提取结果是：" + keyWords);*/
 
 			String[] array = returnText.split(" ");
 			int count = array.length;
 			int start = 0;
-			List<Result> results = new ArrayList<Result>();
+			List<Word> words = new ArrayList<Word>();
 			for(int i=0; i <count; i++) {
 				int position = i+1;
 				String item = array[i];
@@ -75,13 +65,13 @@ public class NlpirTest {
 				String text = arr[0];
 				String type = arr[1];
 				int length = text.length();
-				Result result = new Result(text,type,position,start,length);
-				results.add(result);
+				Word word = new Word(text,type,position,start,length);
+				words.add(word);
 				start += length;
 			}
 
-			for(Result result : results) {
-				System.out.println(result);
+			for(Word word : words) {
+				System.out.println(word);
 			}
 
 			CLibrary.Instance.NLPIR_Exit();

@@ -1,9 +1,9 @@
-package code;
+package com.ictclas.analysis.analyzer;
 
 /**
  * Created by Lanxiaowei
  */
-public class Result {
+public class Word {
     /**Token文本*/
     private String text;
     /**词性*/
@@ -15,9 +15,9 @@ public class Result {
     /**Token文本长度*/
     private int length;
 
-    public Result() {}
+    public Word() {}
 
-    public Result(String text, String type, int position, int start, int length) {
+    public Word(String text, String type, int position, int start, int length) {
         this.text = text;
         this.type = type;
         this.position = position;
