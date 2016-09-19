@@ -50,10 +50,10 @@ public class IctclasTokenizer extends Tokenizer {
         positionAtt = addAttribute(PositionIncrementAttribute.class);
         this.stopwordsDir = stopwordsDir;
         this.userDic = userDic;
-        initUserDic();
-        addStopwords(this.stopwordsDir);
         this.dllPath = dllPath;
         IctclasContextManager.getContext().setDllPath(this.dllPath);
+        initUserDic();
+        addStopwords(this.stopwordsDir);
     }
 
     public IctclasTokenizer(AttributeFactory factory, Boolean addSpeech,String stopwordsDir,String userDic) {
@@ -93,10 +93,10 @@ public class IctclasTokenizer extends Tokenizer {
         typeAtt = addAttribute(TypeAttribute.class);
         positionAtt = addAttribute(PositionIncrementAttribute.class);
         this.userDic = userDic;
-        initUserDic();
-        this.filter = filter;
         this.dllPath = dllPath;
         IctclasContextManager.getContext().setDllPath(this.dllPath);
+        initUserDic();
+        this.filter = filter;
     }
 
     public IctclasTokenizer(Boolean addSpeech,Set<String> filter,String userDic) {
