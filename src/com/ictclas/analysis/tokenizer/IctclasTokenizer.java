@@ -2,6 +2,9 @@ package com.ictclas.analysis.tokenizer;
 
 import com.ictclas.analysis.analyzer.IctclasSeg;
 import com.ictclas.analysis.analyzer.Word;
+import com.ictclas.core.NlpirLib;
+import com.ictclas.core.NlpirMethod;
+import com.ictclas.dic.UserDicManager;
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
@@ -12,6 +15,8 @@ import org.apache.lucene.util.AttributeFactory;
 import java.io.*;
 import java.util.HashSet;
 import java.util.Set;
+
+import static com.ictclas.core.NlpirMethod.NLPIR_ImportUserDict;
 
 /**
  * Created by Lanxiaowei
@@ -31,10 +36,25 @@ public class IctclasTokenizer extends Tokenizer {
     private Set<String> filter;
     /**停用词字典文件加载路径*/
     private String stopwordsDir;
+    /**用户扩展字典文件加载路径*/
+    private String userDic;
 
     private String text;
 
-    public IctclasTokenizer(AttributeFactory factory, boolean addSpeech,String stopwordsDir) {
+    public IctclasTokenizer(AttributeFactory factory, boolean addSpeech,String stopwordsDir,String userDic) {
+        super(factory);
+        this.addSpeech = addSpeech;
+        termAtt = addAttribute(CharTermAttribute.class);
+        offsetAtt = addAttribute(OffsetAttribute.class);
+        typeAtt = addAttribute(TypeAttribute.class);
+        positionAtt = addAttribute(PositionIncrementAttribute.class);
+        this.stopwordsDir = stopwordsDir;
+        this.userDic = userDic;
+        initUserDic();
+        addStopwords(stopwordsDir);
+    }
+
+    public IctclasTokenizer(AttributeFactory factory, boolean addSpeech,Set<String> filter,String userDic) {
         super(factory);
         this.addSpeech = addSpeech;
         //this.seg = new IctclasSeg(this.text,this.dllPath,this.addSpeech);
@@ -42,51 +62,48 @@ public class IctclasTokenizer extends Tokenizer {
         offsetAtt = addAttribute(OffsetAttribute.class);
         typeAtt = addAttribute(TypeAttribute.class);
         positionAtt = addAttribute(PositionIncrementAttribute.class);
-        this.stopwordsDir = stopwordsDir;
-        addStopwords(stopwordsDir);
+        this.userDic = userDic;
+        initUserDic();
+        this.filter = filter;
     }
 
-    public IctclasTokenizer(AttributeFactory factory, boolean addSpeech,Set<String> filter) {
-        super(factory);
+    public IctclasTokenizer(AttributeFactory factory,boolean addSpeech,String userDic) {
+        this(factory,addSpeech,"",userDic);
+    }
+
+    public IctclasTokenizer(boolean addSpeech,Set<String> filter,String userDic) {
         this.addSpeech = addSpeech;
-        //this.seg = new IctclasSeg(this.text,this.dllPath,this.addSpeech);
         termAtt = addAttribute(CharTermAttribute.class);
         offsetAtt = addAttribute(OffsetAttribute.class);
         typeAtt = addAttribute(TypeAttribute.class);
         positionAtt = addAttribute(PositionIncrementAttribute.class);
+        this.userDic = userDic;
+        initUserDic();
         this.filter = filter;
     }
 
-    public IctclasTokenizer(AttributeFactory factory,boolean addSpeech) {
-        this(factory,addSpeech,"");
-    }
-
-    public IctclasTokenizer(boolean addSpeech,Set<String> filter) {
-        this.addSpeech = addSpeech;
-        //this.seg = new IctclasSeg(this.text,this.dllPath,this.addSpeech);
-        termAtt = addAttribute(CharTermAttribute.class);
-        offsetAtt = addAttribute(OffsetAttribute.class);
-        typeAtt = addAttribute(TypeAttribute.class);
-        positionAtt = addAttribute(PositionIncrementAttribute.class);
-        this.filter = filter;
-    }
-
-    public IctclasTokenizer(boolean addSpeech,String stopwordsDir) {
+    public IctclasTokenizer(boolean addSpeech,String stopwordsDir,String userDic) {
         this.addSpeech = addSpeech;
         termAtt = addAttribute(CharTermAttribute.class);
         offsetAtt = addAttribute(OffsetAttribute.class);
         typeAtt = addAttribute(TypeAttribute.class);
         positionAtt = addAttribute(PositionIncrementAttribute.class);
         this.stopwordsDir = stopwordsDir;
+        this.userDic = userDic;
+        initUserDic();
         addStopwords(stopwordsDir);
     }
 
-    public IctclasTokenizer(boolean addSpeech) {
-        this(addSpeech,"");
+    public IctclasTokenizer(boolean addSpeech,String userDic) {
+        this(addSpeech,"",userDic);
+    }
+
+    public IctclasTokenizer(String userDic) {
+        this(true,"",userDic);
     }
 
     public IctclasTokenizer() {
-        this(true,"");
+        this(true,"",null);
     }
 
     public boolean incrementToken() throws IOException {
@@ -128,6 +145,17 @@ public class IctclasTokenizer extends Tokenizer {
     public IctclasTokenizer setText(String text) {
         this.text = text;
         this.seg = new IctclasSeg(this.text,this.addSpeech);
+        return this;
+    }
+
+    public IctclasTokenizer initUserDic() {
+        if(null != this.userDic && !"".equals(this.userDic)) {
+            UserDicManager.importUserDict(this.userDic, true);
+            //NlpirMethod.NLPIR_ImportUserDict(this.userDic, true);
+            //int result = NlpirMethod.NLPIR_ImportUserDict(this.userDic, true);
+            //System.out.println("Import words count:" + result);
+            //System.out.println("User dictionary imported " + (result > 0? "successful" : "failure"));
+        }
         return this;
     }
 

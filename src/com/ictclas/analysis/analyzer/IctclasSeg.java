@@ -1,7 +1,7 @@
 package com.ictclas.analysis.analyzer;
 
-import com.sun.jna.Library;
-import com.sun.jna.Native;
+import com.ictclas.core.NlpirMethod;
+import com.ictclas.dic.UserDicManager;
 
 import java.io.*;
 
@@ -16,10 +16,6 @@ public class IctclasSeg {
 
     private TokenIterator iterator;
 
-    static {
-        initDll();
-    }
-
     public IctclasSeg(String text,boolean addSpeech) {
         this.text = text;
         this.addSpeech = addSpeech;
@@ -33,27 +29,8 @@ public class IctclasSeg {
         return null;
     }
 
-    private static void initDll() {
-        String argu = "";
-        //UTF-8:1 GBK:0，BIG5:2 含繁体字的GBK:3
-        String system_charset = "UTF-8";
-        int charset_type = 1;
-        int init_flag = 0;
-        try {
-            init_flag = IctclasAnalyzer.CLibrary.Instance.NLPIR_Init(argu
-                    .getBytes(system_charset), charset_type, "0"
-                    .getBytes(system_charset));
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("NLPIR dll init fail.");
-        }
-        if (0 == init_flag) {
-            throw new RuntimeException("NLPIR dll init fail.");
-        }
-    }
-
     private String analysis(String text,boolean addSpeech) {
-        return IctclasAnalyzer.CLibrary.Instance
-                .NLPIR_ParagraphProcess(text, addSpeech? 1 : 0);
+        return NlpirMethod.NLPIR_ParagraphProcess(text, addSpeech? 1 : 0);
     }
 
     private TokenIterator iterator() {
