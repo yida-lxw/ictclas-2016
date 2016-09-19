@@ -14,7 +14,8 @@ public class IctclasAnalyzerTest {
     public static void main(String[] args) throws IOException {
         String text = "《大话3》被吐槽：情怀很珍贵 请勿滥消费";
         String dllPath = "E:/git-space/ictclas-2016/Data/";
-        Analyzer analyzer = new IctclasAnalyzer(dllPath);
+        String stopwordPath = "E:\\apache-tomcat-7.0.55\\webapps\\solr\\WEB-INF\\classes\\stopword.dic";
+        Analyzer analyzer = new IctclasAnalyzer(dllPath,false,stopwordPath);
         displayTokens(analyzer, text);
     }
 }

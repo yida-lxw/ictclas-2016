@@ -42,7 +42,7 @@ public class TokenIterator implements Iterator<Word> {
         if(str.startsWith("/") || str.indexOf("/") == -1) {
             int len = str.length();
             int start = start(str,i+1);
-            word = new Word(str,"",i+1,start,len);
+            word = new Word(str,"word",i+1,start,len);
         } else {
             String text = str.substring(0,str.indexOf("/"));
             String type = str.substring(str.indexOf("/") + 1);

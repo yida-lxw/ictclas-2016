@@ -104,6 +104,7 @@ public class IctclasTokenizer extends Tokenizer {
         boolean flag = true;
         do {
             word = seg.readNext();
+            position++;
             if(null == word) {
                 break;
             }
@@ -111,7 +112,6 @@ public class IctclasTokenizer extends Tokenizer {
             if (filter != null && filter.contains(wordStr)) {
                 continue;
             } else {
-                position++;
                 flag = false;
             }
         } while(flag);
@@ -148,14 +148,28 @@ public class IctclasTokenizer extends Tokenizer {
         }
         this.filter = new HashSet<String>();
         InputStreamReader reader;
+        InputStream is = null;
         try {
-            InputStream is = this.getClass().getClassLoader().getResourceAsStream(dir);
-            reader = new InputStreamReader(is,"UTF-8");
-            BufferedReader br = new BufferedReader(reader);
-            String word = br.readLine();
-            while (word != null) {
-                this.filter.add(word);
-                word = br.readLine();
+            is = this.getClass().getClassLoader().getResourceAsStream(dir);
+            if(null == is) {
+                is = new FileInputStream(dir);
+
+            }
+            try {
+                is = new FileInputStream(dir);
+                reader = new InputStreamReader(is,"UTF-8");
+                BufferedReader br = new BufferedReader(reader);
+                String word = br.readLine();
+                while (word != null) {
+                    this.filter.add(word);
+                    word = br.readLine();
+                }
+            } catch (FileNotFoundException e1) {
+                throw new RuntimeException("No custom stopword file found");
+            } catch (UnsupportedEncodingException e1) {
+                throw new RuntimeException("stopword.dic encoding Unsupported");
+            } catch (IOException e1) {
+                throw new RuntimeException("read stopword.dic occur IO Exception");
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException("No custom stopword file found");
