@@ -16,8 +16,8 @@ public class IctclasAnalyzerTest {
         String text = "《大话3》被吐槽：情怀很珍贵 请勿滥消费么么哒";
         //停用词字典文件加载路径
         String stopwordPath = "E:/apache-tomcat-7.0.55/webapps/solr/WEB-INF/classes/stopword.dic";
-        //用户自定义扩展字典文件加载路径
-        String userDicPath = "dict/user_dict.txt";
+        //用户自定义扩展字典文件加载路径,可以是绝对路径
+        String userDicPath = "E:\\git-space\\ictclas-2016\\dict\\user_dict.txt";
         Analyzer analyzer = new IctclasAnalyzer(false,stopwordPath,userDicPath);
         displayTokens(analyzer, text);
     }

@@ -139,7 +139,7 @@ public class NlpirTest {
      */
     @Test
     public void testImportUserDict(){
-        int flag = NlpirMethod.NLPIR_ImportUserDict("dict/user_dict.txt", true);
+        int flag = NlpirMethod.NLPIR_ImportUserDict("E:\\git-space\\ictclas-2016\\dict\\user_dict.txt", true);
         System.out.println("Importe User dictionary [user_dict.txt]:" + flag);
     }
 
