@@ -35,8 +35,26 @@ public class IctclasTokenizer extends Tokenizer {
     private String stopwordsDir;
     /**用户扩展字典文件加载路径*/
     private String userDic;
+    /**Ictclas分词器初始化时需要加载的NLPIR.dll文件的加载路径*/
+    private String dllPath;
 
     private String text;
+
+    public IctclasTokenizer(AttributeFactory factory, Boolean addSpeech,
+              String stopwordsDir,String userDic,String dllPath) {
+        super(factory);
+        this.addSpeech = addSpeech;
+        termAtt = addAttribute(CharTermAttribute.class);
+        offsetAtt = addAttribute(OffsetAttribute.class);
+        typeAtt = addAttribute(TypeAttribute.class);
+        positionAtt = addAttribute(PositionIncrementAttribute.class);
+        this.stopwordsDir = stopwordsDir;
+        this.userDic = userDic;
+        initUserDic();
+        addStopwords(this.stopwordsDir);
+        this.dllPath = dllPath;
+        IctclasContextManager.getContext().setDllPath(this.dllPath);
+    }
 
     public IctclasTokenizer(AttributeFactory factory, Boolean addSpeech,String stopwordsDir,String userDic) {
         super(factory);
@@ -48,7 +66,7 @@ public class IctclasTokenizer extends Tokenizer {
         this.stopwordsDir = stopwordsDir;
         this.userDic = userDic;
         initUserDic();
-        addStopwords(stopwordsDir);
+        addStopwords(this.stopwordsDir);
     }
 
     public IctclasTokenizer(AttributeFactory factory, Boolean addSpeech,Set<String> filter,String userDic) {
@@ -66,6 +84,19 @@ public class IctclasTokenizer extends Tokenizer {
 
     public IctclasTokenizer(AttributeFactory factory,Boolean addSpeech,String userDic) {
         this(factory,addSpeech,"",userDic);
+    }
+
+    public IctclasTokenizer(Boolean addSpeech,Set<String> filter,String userDic,String dllPath) {
+        this.addSpeech = addSpeech;
+        termAtt = addAttribute(CharTermAttribute.class);
+        offsetAtt = addAttribute(OffsetAttribute.class);
+        typeAtt = addAttribute(TypeAttribute.class);
+        positionAtt = addAttribute(PositionIncrementAttribute.class);
+        this.userDic = userDic;
+        initUserDic();
+        this.filter = filter;
+        this.dllPath = dllPath;
+        IctclasContextManager.getContext().setDllPath(this.dllPath);
     }
 
     public IctclasTokenizer(Boolean addSpeech,Set<String> filter,String userDic) {
@@ -88,7 +119,7 @@ public class IctclasTokenizer extends Tokenizer {
         this.stopwordsDir = stopwordsDir;
         this.userDic = userDic;
         initUserDic();
-        addStopwords(stopwordsDir);
+        addStopwords(this.stopwordsDir);
     }
 
     public IctclasTokenizer(Boolean addSpeech,String userDic) {
@@ -142,6 +173,12 @@ public class IctclasTokenizer extends Tokenizer {
     public IctclasTokenizer setText(String text) {
         this.text = text;
         this.seg = new IctclasSeg(this.text,this.addSpeech);
+        return this;
+    }
+
+    public IctclasTokenizer setDllPath(String dllPath) {
+        this.dllPath = dllPath;
+        IctclasContextManager.getContext().setDllPath(dllPath);
         return this;
     }
 

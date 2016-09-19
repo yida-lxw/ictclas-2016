@@ -13,9 +13,16 @@ public interface Configuration {
     public String dllPath();
 
     /**
-     * 返回停用词字典文件的加载路径
-     * @return
+     * 提供给用户手动注入dll文件的加载路径，
+     * 默认会从ictclas.properties属性文件中获取dll文件的加载路径
+     * @param dllPath
      */
+    public void setDllPath(String dllPath);
+
+        /**
+         * 返回停用词字典文件的加载路径
+         * @return
+         */
     public String stopwordPath();
 
     /**

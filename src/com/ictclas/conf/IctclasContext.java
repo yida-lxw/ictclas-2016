@@ -31,6 +31,13 @@ public class IctclasContext {
         return this.config.dllPath();
     }
 
+    public void setDllPath(String dllPath) {
+        if(null == this.config) {
+            return;
+        }
+        this.config.setDllPath(dllPath);
+    }
+
     public String getUserDic() {
         if(null == this.config) {
             return OSInfo.getModulePath(DefaultConfiguration.DLL_FILE_NAME);

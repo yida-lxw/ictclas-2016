@@ -17,6 +17,8 @@ public class DefaultConfiguration implements Configuration {
 
     private Properties props;
 
+    private String dllPath;
+
     private DefaultConfiguration() {
         if(null != this.props) {
             return;
@@ -44,14 +46,25 @@ public class DefaultConfiguration implements Configuration {
      * @return
      */
     public String dllPath() {
+        //如果用户手动设置了dllPath，那么忽略ictclas.properties属性文件中
+        //配置的dll_path
+        if(null != this.dllPath && !"".equals(this.dllPath)) {
+            return this.dllPath;
+        }
         if(null == this.props) {
-            return OSInfo.getModulePath(DLL_FILE_NAME);
+            this.dllPath = OSInfo.getModulePath(DLL_FILE_NAME);
+        } else {
+            String dllFilePath = this.props.getProperty("dll_path");
+            if(null == dllFilePath || "".equals(dllFilePath)) {
+                dllFilePath = OSInfo.getModulePath(DLL_FILE_NAME);
+            }
+            this.dllPath = dllFilePath;
         }
-        String dllPath = this.props.getProperty("dll_path");
-        if(null == dllPath || "".equals(dllPath)) {
-            dllPath = OSInfo.getModulePath(DLL_FILE_NAME);
-        }
-        return dllPath;
+        return this.dllPath;
+    }
+
+    public void setDllPath(String dllPath) {
+        this.dllPath = dllPath;
     }
 
     /**
