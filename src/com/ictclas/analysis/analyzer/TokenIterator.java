@@ -35,17 +35,23 @@ public class TokenIterator implements Iterator<Word> {
         }
         cursor = i + 1;
         String str = items[lastRet = i];
-        if(null == str || "".equals(str)) {
+        if(null == str) {
             return null;
         }
         Word word = null;
-        if(str.startsWith("/") || str.indexOf("/") == -1) {
+        if((str.startsWith("/") && str.indexOf("/") == str.lastIndexOf("/")) ||
+                -1 == str.indexOf("/") || "".equals(str)) {
+            if("".equals(str)) {
+                str = " ";
+            } else if(str.indexOf(" ") != -1) {
+                str += " ";
+            }
             int len = str.length();
             int start = start(str,i+1);
             word = new Word(str,"word",i+1,start,len);
         } else {
-            String text = str.substring(0,str.indexOf("/"));
-            String type = str.substring(str.indexOf("/") + 1);
+            String text = str.substring(0,str.lastIndexOf("/"));
+            String type = str.substring(str.lastIndexOf("/") + 1);
             int len = text.length();
             int start = start(text,i+1);
             word = new Word(text,type,i+1,start,len);
@@ -66,9 +72,12 @@ public class TokenIterator implements Iterator<Word> {
         int index = 0;
         for(int i=0; i < len; i++) {
             String it = items[i];
+            if("".equals(it)){
+               it = " ";
+            }
             String text = null;
             if((it.startsWith("/") && it.indexOf("/") == it.lastIndexOf("/")) ||
-                    -1 == it.indexOf("/")) {
+                    -1 == it.indexOf("/") || " ".equals(it)) {
                 text = it;
             } else {
                 text = it.substring(0,it.indexOf("/"));
@@ -80,6 +89,9 @@ public class TokenIterator implements Iterator<Word> {
         }
         for(int j=0; j < index; j++) {
             String it = items[j];
+            if("".equals(it)){
+                it = " ";
+            }
             int length = 0;
             if((it.startsWith("/") && it.indexOf("/") == it.lastIndexOf("/")) ||
                     -1 == it.indexOf("/")) {

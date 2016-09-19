@@ -1,6 +1,8 @@
 package com.ictclas.analysis.analyzer;
 
 import com.ictclas.analysis.tokenizer.IctclasTokenizer;
+import com.sun.jna.Library;
+import com.sun.jna.Native;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.Tokenizer;
 
@@ -57,11 +59,11 @@ public class IctclasAnalyzer extends Analyzer {
     protected TokenStreamComponents createComponents(String fieldName) {
         Tokenizer tokenizer = null;
         if(null == stopwordsDir || "".equals(stopwordsDir)) {
-            tokenizer = new IctclasTokenizer(this.dllPath,this.addSpeech,this.filter)
+            tokenizer = new IctclasTokenizer(this.addSpeech,this.filter)
                     .setText(this.text);
 
         } else {
-            tokenizer = new IctclasTokenizer(this.dllPath,this.addSpeech,this.stopwordsDir)
+            tokenizer = new IctclasTokenizer(this.addSpeech,this.stopwordsDir)
                     .setText(this.text);
         }
         return new TokenStreamComponents(tokenizer);
@@ -80,5 +82,34 @@ public class IctclasAnalyzer extends Analyzer {
             e.printStackTrace();
         }
         return buffer.toString();
+    }
+
+    // 定义接口CLibrary，继承自com.sun.jna.Library
+    public interface CLibrary extends Library {
+        // 定义并初始化接口的静态变量
+        CLibrary Instance = (CLibrary) Native.loadLibrary(
+                dllPath + "NLPIR", CLibrary.class);
+
+        // 初始化函数声明：sDataPath是初始化路径地址，
+        // 包括核心词库和配置文件的路径，encoding为输入字符的编码格式
+        public int NLPIR_Init(byte[] sDataPath, int encoding,
+                              byte[] sLicenceCode);
+        // 分词函数声明：sSrc为待分字符串，bPOSTagged=0表示不进行词性标注，
+        // bPOSTagged=1表示进行词性标注
+        public String NLPIR_ParagraphProcess(String sSrc, int bPOSTagged);
+
+        // 添加用户词汇,如果添加成功，返回值为1，否则返回值为0
+        public int NLPIR_AddUserWord(String sWord);
+        // 删除用户词汇
+        public int NLPIR_DelUsrWord(String sWord);
+        // 保存用户词汇到用户词典
+        public int NLPIR_SaveTheUsrDic();
+        // 导入用户自定义词典：自定义词典路径，bOverwrite=true表示替代当前的自定义词典，false表示添加到当前自定义词典后
+        public int NLPIR_ImportUserDict(String sFilename, boolean bOverwrite);
+
+        //获取关键词
+        public String NLPIR_GetKeyWords(String sLine, int nMaxKeyLimit,
+                                        boolean bWeightOut);
+        public void NLPIR_Exit();
     }
 }

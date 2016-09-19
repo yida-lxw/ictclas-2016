@@ -20,8 +20,6 @@ import java.util.Set;
 public class IctclasTokenizer extends Tokenizer {
     /** 是否添加词性*/
     private boolean addSpeech;
-    /**NLPIR.dll文件的加载路径*/
-    private static String dllPath;
 
     private IctclasSeg seg;
 
@@ -36,9 +34,8 @@ public class IctclasTokenizer extends Tokenizer {
 
     private String text;
 
-    public IctclasTokenizer(AttributeFactory factory, String dllPath,boolean addSpeech,String stopwordsDir) {
+    public IctclasTokenizer(AttributeFactory factory, boolean addSpeech,String stopwordsDir) {
         super(factory);
-        this.dllPath = dllPath;
         this.addSpeech = addSpeech;
         //this.seg = new IctclasSeg(this.text,this.dllPath,this.addSpeech);
         termAtt = addAttribute(CharTermAttribute.class);
@@ -49,9 +46,8 @@ public class IctclasTokenizer extends Tokenizer {
         addStopwords(stopwordsDir);
     }
 
-    public IctclasTokenizer(AttributeFactory factory, String dllPath,boolean addSpeech,Set<String> filter) {
+    public IctclasTokenizer(AttributeFactory factory, boolean addSpeech,Set<String> filter) {
         super(factory);
-        this.dllPath = dllPath;
         this.addSpeech = addSpeech;
         //this.seg = new IctclasSeg(this.text,this.dllPath,this.addSpeech);
         termAtt = addAttribute(CharTermAttribute.class);
@@ -61,12 +57,11 @@ public class IctclasTokenizer extends Tokenizer {
         this.filter = filter;
     }
 
-    public IctclasTokenizer(AttributeFactory factory, String dllPath,boolean addSpeech) {
-        this(factory,dllPath,addSpeech,"");
+    public IctclasTokenizer(AttributeFactory factory,boolean addSpeech) {
+        this(factory,addSpeech,"");
     }
 
-    public IctclasTokenizer(String dllPath,boolean addSpeech,Set<String> filter) {
-        this.dllPath = dllPath;
+    public IctclasTokenizer(boolean addSpeech,Set<String> filter) {
         this.addSpeech = addSpeech;
         //this.seg = new IctclasSeg(this.text,this.dllPath,this.addSpeech);
         termAtt = addAttribute(CharTermAttribute.class);
@@ -76,10 +71,8 @@ public class IctclasTokenizer extends Tokenizer {
         this.filter = filter;
     }
 
-    public IctclasTokenizer(String dllPath,boolean addSpeech,String stopwordsDir) {
-        this.dllPath = dllPath;
+    public IctclasTokenizer(boolean addSpeech,String stopwordsDir) {
         this.addSpeech = addSpeech;
-        //this.seg = new IctclasSeg(this.text,this.dllPath,this.addSpeech);
         termAtt = addAttribute(CharTermAttribute.class);
         offsetAtt = addAttribute(OffsetAttribute.class);
         typeAtt = addAttribute(TypeAttribute.class);
@@ -88,12 +81,12 @@ public class IctclasTokenizer extends Tokenizer {
         addStopwords(stopwordsDir);
     }
 
-    public IctclasTokenizer(String dllPath,boolean addSpeech) {
-        this(dllPath,addSpeech,"");
+    public IctclasTokenizer(boolean addSpeech) {
+        this(addSpeech,"");
     }
 
-    public IctclasTokenizer(String dllPath) {
-        this(dllPath,true,"");
+    public IctclasTokenizer() {
+        this(true,"");
     }
 
     public boolean incrementToken() throws IOException {
@@ -134,7 +127,7 @@ public class IctclasTokenizer extends Tokenizer {
 
     public IctclasTokenizer setText(String text) {
         this.text = text;
-        this.seg = new IctclasSeg(this.text,this.dllPath,this.addSpeech);
+        this.seg = new IctclasSeg(this.text,this.addSpeech);
         return this;
     }
 
