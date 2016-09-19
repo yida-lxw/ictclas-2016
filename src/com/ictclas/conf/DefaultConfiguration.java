@@ -60,7 +60,6 @@ public class DefaultConfiguration implements Configuration {
             }
             this.dllPath = dllFilePath;
         }
-        System.out.println("dllPath-->" + this.dllPath);
         return this.dllPath;
     }
 
