@@ -2,11 +2,7 @@ package com.ictclas.core;
 
 /**
  * Created by Lanxiaowei
- */
-/**
  * 分词组件方法类
- *
- * @author move
  *
  */
 public class NlpirMethod {

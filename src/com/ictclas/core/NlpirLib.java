@@ -1,6 +1,5 @@
 package com.ictclas.core;
 
-import com.ictclas.conf.IctclasContext;
 import com.ictclas.conf.IctclasContextManager;
 import com.sun.jna.Library;
 import com.sun.jna.Native;

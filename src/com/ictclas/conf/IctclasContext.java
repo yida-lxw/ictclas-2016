@@ -2,10 +2,6 @@ package com.ictclas.conf;
 
 import com.ictclas.core.OSInfo;
 
-import com.ictclas.conf.DefaultConfiguration;
-
-import static com.ictclas.conf.DefaultConfiguration.DLL_FILE_NAME;
-
 /**
  * Created by Lanxiaowei
  */
