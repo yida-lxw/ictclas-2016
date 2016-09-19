@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public class IctclasAnalyzer extends Analyzer {
     /** 是否添加词性*/
-    private boolean addSpeech;
+    private Boolean addSpeech;
     /**自定义停用词*/
     private Set<String> filter;
     /**停用词字典文件加载路径*/
@@ -25,28 +25,28 @@ public class IctclasAnalyzer extends Analyzer {
 
     private String text;
 
-    public IctclasAnalyzer(boolean addSpeech, String stopwordsDir,String userDic) {
+    public IctclasAnalyzer(Boolean addSpeech, String stopwordsDir,String userDic) {
         this.addSpeech = addSpeech;
         this.stopwordsDir = stopwordsDir;
         this.userDic = userDic;
     }
 
-    public IctclasAnalyzer(boolean addSpeech,Set<String> filter,String userDic) {
+    public IctclasAnalyzer(Boolean addSpeech,Set<String> filter,String userDic) {
         this.addSpeech = addSpeech;
         this.filter = filter;
         this.userDic = userDic;
     }
 
-    public IctclasAnalyzer(boolean addSpeech,String userDic) {
+    public IctclasAnalyzer(Boolean addSpeech,String userDic) {
         this(addSpeech,"",userDic);
     }
 
     public IctclasAnalyzer(String userDic) {
-        this(true,userDic);
+        this(null,userDic);
     }
 
     public IctclasAnalyzer() {
-        this(true,null);
+        this(null,null);
     }
 
     @Override

@@ -1,25 +1,27 @@
 package com.ictclas.analysis.analyzer;
 
+import com.ictclas.conf.IctclasContext;
+import com.ictclas.conf.IctclasContextManager;
 import com.ictclas.core.NlpirMethod;
-import com.ictclas.dic.UserDicManager;
-
-import java.io.*;
 
 /**
  * Created by Lanxiaowei
  */
 public class IctclasSeg {
     /** 是否添加词性*/
-    private boolean addSpeech;
+    private Boolean addSpeech;
     /**原始文本*/
     private String text;
 
     private TokenIterator iterator;
 
-    public IctclasSeg(String text,boolean addSpeech) {
+    private IctclasContext context;
+
+    public IctclasSeg(String text,Boolean addSpeech) {
         this.text = text;
         this.addSpeech = addSpeech;
         this.iterator = iterator();
+        this.context = IctclasContextManager.getContext();
     }
 
     public Word readNext() {
@@ -34,7 +36,7 @@ public class IctclasSeg {
     }
 
     private TokenIterator iterator() {
-        String text = analysis(this.text,this.addSpeech);
+        String text = analysis(this.text,isAddSpeech());
         if(null == text || "".equals(text)) {
             return null;
         }
@@ -65,5 +67,15 @@ public class IctclasSeg {
 
     public TokenIterator getIterator() {
         return iterator;
+    }
+
+    public Boolean isAddSpeech() {
+        if(null == this.context) {
+            return (this.addSpeech == null) ? false : this.addSpeech;
+        }
+        if(null == this.addSpeech) {
+            return this.context.addSpeech();
+        }
+        return this.addSpeech;
     }
 }

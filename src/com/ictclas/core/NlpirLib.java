@@ -1,5 +1,7 @@
 package com.ictclas.core;
 
+import com.ictclas.conf.IctclasContext;
+import com.ictclas.conf.IctclasContextManager;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 
@@ -9,7 +11,10 @@ import com.sun.jna.Native;
  */
 public interface NlpirLib extends Library {
     // 定义并初始化接口的静态变量，通过JNA调用NLPIR.dll;
-    NlpirLib Instance = (NlpirLib) Native.loadLibrary(OSInfo.getModulePath("NLPIR"), NlpirLib.class);
+    //NlpirLib Instance = (NlpirLib) Native.loadLibrary(OSInfo.getModulePath("NLPIR"), NlpirLib.class);
+    NlpirLib Instance = (NlpirLib) Native.loadLibrary(
+            IctclasContextManager.getContext().getDllPath(),
+            NlpirLib.class);
 
     /**
      * 组件初始化

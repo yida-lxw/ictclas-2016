@@ -15,8 +15,10 @@ public class OSInfo {
      * @return 形式如下：linux64/组件名.扩展名、win32/组件名.扩展名
      */
     public static String getModulePath(String module) {
-        String folder = ""; // 文件夹名
-        String extension = ""; // 扩展名
+        // 文件夹名
+        String folder = "";
+        // 扩展名
+        String extension = "";
 
         if (OS_NAME.contains("win")) {
             extension = ".dll";
@@ -35,7 +37,6 @@ public class OSInfo {
                 folder = "linux64/";
             }
         }
-
         return folder + module + extension;
     }
 }
