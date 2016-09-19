@@ -19,6 +19,12 @@ public interface Configuration {
      */
     public void setDllPath(String dllPath);
 
+    /**Ictclas的data目录*/
+    public String dataPath();
+
+    /**设置Ictclas的data目录*/
+    public void setDataPath(String dataPath);
+
         /**
          * 返回停用词字典文件的加载路径
          * @return

@@ -1,5 +1,7 @@
 package com.ictclas.core;
 
+import com.ictclas.conf.IctclasContextManager;
+
 /**
  * Created by Lanxiaowei
  * 分词组件方法类
@@ -8,7 +10,8 @@ package com.ictclas.core;
 public class NlpirMethod {
     // 初始化
     static {
-        boolean flag = NlpirLib.Instance.NLPIR_Init("", 1, "");
+        boolean flag = NlpirLib.Instance.NLPIR_Init(
+                IctclasContextManager.getContext().dataPath(), 1, "");
 
         if (flag) {
             System.out.println("Ictclas分词器初始化成功");

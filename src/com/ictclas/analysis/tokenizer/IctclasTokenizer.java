@@ -41,6 +41,23 @@ public class IctclasTokenizer extends Tokenizer {
     private String text;
 
     public IctclasTokenizer(AttributeFactory factory, Boolean addSpeech,
+            String stopwordsDir,String userDic,String dllPath,String dataPath) {
+        super(factory);
+        this.addSpeech = addSpeech;
+        termAtt = addAttribute(CharTermAttribute.class);
+        offsetAtt = addAttribute(OffsetAttribute.class);
+        typeAtt = addAttribute(TypeAttribute.class);
+        positionAtt = addAttribute(PositionIncrementAttribute.class);
+        this.stopwordsDir = stopwordsDir;
+        this.userDic = userDic;
+        this.dllPath = dllPath;
+        IctclasContextManager.getContext().setDllPath(this.dllPath);
+        IctclasContextManager.getContext().setDataPath(dataPath);
+        initUserDic();
+        addStopwords(this.stopwordsDir);
+    }
+
+    public IctclasTokenizer(AttributeFactory factory, Boolean addSpeech,
               String stopwordsDir,String userDic,String dllPath) {
         super(factory);
         this.addSpeech = addSpeech;
@@ -214,7 +231,6 @@ public class IctclasTokenizer extends Tokenizer {
             is = this.getClass().getClassLoader().getResourceAsStream(dir);
             if(null == is) {
                 is = new FileInputStream(dir);
-
             }
             try {
                 is = new FileInputStream(dir);

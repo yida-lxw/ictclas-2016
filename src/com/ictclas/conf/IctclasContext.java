@@ -31,7 +31,26 @@ public class IctclasContext {
         if(null == this.config) {
             return;
         }
+        if(null == dllPath || "".equals(dllPath)) {
+            return;
+        }
         this.config.setDllPath(dllPath);
+    }
+
+    /**Ictclas的data目录*/
+    public String dataPath() {
+        if(null == this.config) {
+            return null;
+        }
+        return this.config.dataPath();
+    }
+
+    /**设置Ictclas的data目录*/
+    public void setDataPath(String dataPath) {
+        if(null == this.config) {
+            return;
+        }
+        this.config.setDataPath(dataPath == null ? "" : dataPath);
     }
 
     public String getUserDic() {

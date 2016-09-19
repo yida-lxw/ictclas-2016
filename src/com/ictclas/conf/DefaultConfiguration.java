@@ -19,6 +19,8 @@ public class DefaultConfiguration implements Configuration {
 
     private String dllPath;
 
+    private String dataPath;
+
     private DefaultConfiguration() {
         if(null != this.props) {
             return;
@@ -65,6 +67,25 @@ public class DefaultConfiguration implements Configuration {
 
     public void setDllPath(String dllPath) {
         this.dllPath = dllPath;
+    }
+
+    /**Ictclas的data目录*/
+    public String dataPath() {
+        if(null != this.dataPath && !"".equals(this.dataPath)) {
+            return this.dataPath;
+        }
+        if(null == this.props) {
+            this.dataPath = "";
+        } else {
+            String dataFilePath = this.props.getProperty("data_path");
+            this.dataPath = dataFilePath;
+        }
+        return this.dataPath;
+    }
+
+    /**设置Ictclas的data目录*/
+    public void setDataPath(String dataPath) {
+        this.dataPath = dataPath;
     }
 
     /**
